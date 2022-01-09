@@ -60,12 +60,12 @@ function createStarts(string){
 	return starts;
 }
 
-function randomizeString(map, size, minWeight, maxWeight, minWorth, maxWorth){
+function randomizeString(map, num, minWeight, maxWeight, minWorth, maxWorth){
 	let i, string = "", temp;
-	for(i = 0; i < size; i++){
+	for(i = 0; i < num; i++){
 		temp = String.fromCharCode(i + 'A'.charCodeAt(0))[0];
 		string += temp;
-		map.set(temp, {weight: Math.floor(Math.random() * (maxWeight - minWeight)) + Number(minWeight), worth: Math.floor(Math.random() * (maxWorth - minWorth)) + Number(minWorth)});
+		map.set(temp, {weight: Math.floor(Math.random() * (maxWeight - minWeight)) + minWeight, worth: Math.floor(Math.random() * (maxWorth - minWorth)) + minWorth});
 	}
 	return string;
 }
@@ -157,7 +157,7 @@ console.log(`Received result in ${Math.round((Date.now() - startTime) / 100) / 1
 	}
 	
 	
-	perms(start.string, "");
+	perms(start.string, string[0]);
     return most;
   }
   
@@ -191,7 +191,7 @@ async function deploy() {
 	});
 
 	// PROCESS RESULTS 
-	let resultSet = await job.exec();
+	let resultSet = await job.exec(compute.marketValue(2));
 
 	let best = {worth: 0, combo: ""};
 	resultSet.forEach(result =>{
@@ -210,6 +210,8 @@ async function deploy() {
 	totalW = calculateWeight(optimal)
 	finished = true;
 	console.log(`Received result in ${Math.round((Date.now() - startTime) / 100) / 10}s`);
+	
+	drawUI();
 }
 	
 let num = 15;
@@ -221,12 +223,12 @@ let maxW = 25;
 let finished = false;
 	
 function findOptimal(){
-	num = document.getElementById("num").value;
-	limit = document.getElementById("limit").value;
-	minV = document.getElementById("minV").value;
-	maxV = document.getElementById("maxV").value;
-	minW = document.getElementById("minW").value;
-	maxW = document.getElementById("maxW").value;
+	num = Number(document.getElementById("num").value);
+	limit = Number(document.getElementById("limit").value);
+	minV = Number(document.getElementById("minV").value);
+	maxV = Number(document.getElementById("maxV").value);
+	minW = Number(document.getElementById("minW").value);
+	maxW = Number(document.getElementById("maxW").value);
 	
 	str = randomizeString(map, num, minW, maxW, minV, maxV);
 	starts = createStarts(str);
@@ -239,6 +241,7 @@ function findOptimal(){
 	
 	//console.log(dcpStarts);
 	finished = false;
+	drawUI();
 	deploy();
 }
 
@@ -268,12 +271,12 @@ function drawUI(){
 	
 	
 	function drawKnapsack(numIn, out, string){
-		num = document.getElementById("num").value;
-		limit = document.getElementById("limit").value;
-		minV = document.getElementById("minV").value;
-		maxV = document.getElementById("maxV").value;
-		minW = document.getElementById("minW").value;
-		maxW = document.getElementById("maxW").value;
+		num = Number(document.getElementById("num").value);
+		limit = Number(document.getElementById("limit").value);
+		minV = Number(document.getElementById("minV").value);
+		maxV = Number(document.getElementById("maxV").value);
+		minW = Number(document.getElementById("minW").value);
+		maxW = Number(document.getElementById("maxW").value);
 		
 		if(num > str.length){
 			str = randomizeString(map, num, minW, maxW, minV, maxV);
