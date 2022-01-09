@@ -195,7 +195,7 @@ async function deploy() {
 	});
 
 	// PROCESS RESULTS 
-	let resultSet = await job.exec(compute.marketValue(2));
+	let resultSet = await job.exec(compute.marketValue(4));
 
 	let best = {worth: 0, combo: ""};
 	resultSet.forEach(result =>{
@@ -209,7 +209,7 @@ async function deploy() {
 	console.log(best.worth);
 	fit = best.combo.length;
 	
-	optimal = best.combo;
+	optimal = Array.from(best.combo).sort().join('');
 	totalV = best.worth;
 	totalW = calculateWeight(optimal)
 	finished = true;
@@ -307,7 +307,7 @@ function drawUI(){
 		
 	drawKnapsack(fit, false, optimal);
 	
-	if(y === 0){
+	if(sqrtItems * y < optimal || y === 0){
 		y = 1;
 	}
 	roundedRect(ctx, 75, 25, sqrtItems * 50, y * 50, 15);
