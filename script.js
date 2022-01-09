@@ -307,8 +307,8 @@ function drawUI(){
 		
 	drawKnapsack(fit, false, optimal);
 	
-	if(sqrtItems * y < optimal || y === 0){
-		y = 1;
+	if(sqrtItems * y < fit || y === 0){
+		y++;
 	}
 	roundedRect(ctx, 75, 25, sqrtItems * 50, y * 50, 15);
 	
