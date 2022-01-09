@@ -71,7 +71,6 @@ function randomizeString(map, num, minWeight, maxWeight, minWorth, maxWorth){
 }
 
 let map = new Map();
-let size = 80;
 let str = "";
 let starts = [];
 var dcpStarts = [];
@@ -240,7 +239,7 @@ function findOptimal(){
 
 	for(i = 0; i < str.length; i++){
 		//perms(starts[i], "");
-		dcpStarts.push({map: JSON.stringify(map, replacer), string: starts[i], size: size});
+		dcpStarts.push({map: JSON.stringify(map, replacer), string: starts[i], size: limit});
 	}
 	
 	//console.log(dcpStarts);
@@ -313,8 +312,8 @@ function drawUI(){
 	roundedRect(ctx, 75, 25, sqrtItems * 50, y * 50, 15);
 	
 	ctx.font = ctx.font = '16px sans-serif';
-	ctx.fillText("Total weight: " + totalW, 80, 45 + y * 50);
-	ctx.fillText("Total value: " + totalV, 80, 65 + y * 50);
+	ctx.fillText("Total weight: " + totalW + "kg" + " / " + limit + "kg", 80, 45 + y * 50);
+	ctx.fillText("Total value: $" + totalV, 80, 65 + y * 50);
 	
 	drawKnapsack(num - fit, true, str.replaceAll(new RegExp("["+optimal+"]", 'g'), ''));
 	
