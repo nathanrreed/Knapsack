@@ -183,18 +183,18 @@ async function deploy() {
 
 	// Not mandatory console logs for status updates
 	job.on('accepted', () => {
-		//console.log(` - Job accepted with id: ${job.id}`);
+		console.log(` - Job accepted with id: ${job.id}`);
 	});
 	job.on('result', (ev) => {
-		//console.log(` - Received result for slice ${ev.sliceNumber} at ${Math.round((Date.now() - startTime) / 100) / 10}s`);
-		//console.log(ev.result);
+		console.log(` - Received result for slice ${ev.sliceNumber} at ${Math.round((Date.now() - startTime) / 100) / 10}s`);
+		console.log(ev.result);
 	});
 
 	// PROCESS RESULTS 
 	let resultSet = await job.exec();
 
 	let best = {worth: 0, combo: ""};
-		resultSet.forEach(result =>{
+	resultSet.forEach(result =>{
 		if(result.worth > best.worth){
 			best = result;
 		}
@@ -208,7 +208,7 @@ async function deploy() {
 	optimal = best.combo;
 	totalV = best.worth;
 	totalW = calculateWeight(optimal)
-	
+	finished = true;
 	console.log(`Received result in ${Math.round((Date.now() - startTime) / 100) / 10}s`);
 }
 	
@@ -218,6 +218,7 @@ let minV = 1;
 let maxV = 100;
 let minW = 1;
 let maxW = 25;
+let finished = false;
 	
 function findOptimal(){
 	num = document.getElementById("num").value;
@@ -237,6 +238,7 @@ function findOptimal(){
 	}
 	
 	//console.log(dcpStarts);
+	finished = false;
 	deploy();
 }
 
@@ -262,9 +264,7 @@ function drawUI(){
 	  ctx.stroke();
 	}
 
-	let sqrtItems = Math.ceil(Math.sqrt(num));
-	let txt = 100;
-	
+	let sqrtItems = Math.ceil(Math.sqrt(num));	
 	
 	
 	function drawKnapsack(numIn, out, string){
@@ -288,8 +288,8 @@ function drawUI(){
 					ch = string[x + (sqrtItems * y)];				
 					roundedRect(ctx, 80 + x * 50 + offset, 30 + y * 50, 40, 40, 15);
 					ctx.fillText(ch, 80 +  x * 50 + 8 + offset, 30 + y * 50 + 12);
-					ctx.fillText(map.get(ch).weight, 80 + x  * 50 + (45 - ctx.measureText(txt).width) / 2 + offset, 30 + y * 50 + 22);
-					ctx.fillText(map.get(ch).worth, 80 + x * 50 + (45 - ctx.measureText(txt).width) / 2 + offset, 30 + y * 50 + 34);
+					ctx.fillText(map.get(ch).weight + "kg", 80 + x  * 50 + (45 - ctx.measureText(map.get(ch).weight + "kg").width) / 2 + offset, 30 + y * 50 + 22);
+					ctx.fillText("$" + map.get(ch).worth, 80 + x * 50 + (45 - ctx.measureText("$" + map.get(ch).worth).width) / 2 + offset, 30 + y * 50 + 34);
 					done++;
 				}else{
 					return;
@@ -314,6 +314,20 @@ function drawUI(){
 	ctx.font = ctx.font = '16px sans-serif';
 	ctx.fillText("INSIDE KNAPSACK", 80, 20);
 	ctx.fillText("OUTSIDE KNAPSACK", 80 + 50 * (sqrtItems < 3 ? 3 : sqrtItems), 20);
+	
+	
+	if(!finished){
+		ctx.fillStyle = "red";
+	}else{
+		ctx.fillStyle = "green";
+	}
+	
+	var circle = new Path2D();
+    circle.arc(25, 35, 15, 0, 2 * Math.PI);
+
+    ctx.fill(circle);
+	ctx.fillStyle = "black";
+	ctx.stroke(circle);
 }
 
 window.onresize = drawUI;
