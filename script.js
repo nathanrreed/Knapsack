@@ -118,21 +118,21 @@ console.log(`Received result in ${Math.round((Date.now() - startTime) / 100) / 1
 		if(s.length === 0){
 			return;
 		}else if(string.length === 0){
-			if(!isRoom(s[0])){
+			if(!isRoom(s[0], s[0])){
 				return;
 			}
 		}
 		let i;
 		for(i = 1; i < s.length; i++){
 			//console.log(s[0] + string + s[i]);
-			if(isRoom(string + s[i])){
+			if(isRoom(string + s[i], s[0])){
 				progress();
 				perms(s.substr(0, i) + s.substr(i + 1), string + s[i]);
 			}
 		}
 	}
 
-	function isRoom(string){
+	function isRoom(string, string2){
 		let i, worth = 0, weight = 0, curr;
 		for(i = 0; i < string.length; i++){
 			curr = map.get(string[i]);
@@ -148,7 +148,11 @@ console.log(`Received result in ${Math.round((Date.now() - startTime) / 100) / 1
 		
 		if(most.worth < worth){
 			most.worth = worth;
-			most.combo = string;
+			if(string.length !== 0){
+				most.combo = string;
+			}else{
+				most.combo = string2;
+			}
 		}
 		if(weight < size){
 			return true;
@@ -157,7 +161,7 @@ console.log(`Received result in ${Math.round((Date.now() - startTime) / 100) / 1
 	}
 	
 	
-	perms(start.string, string[0]);
+	perms(start.string, start.string[0]);
     return most;
   }
   
