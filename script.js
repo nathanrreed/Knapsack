@@ -194,7 +194,8 @@ async function deploy() {
 	});
 
 	// PROCESS RESULTS 
-	let resultSet = await job.exec(compute.marketValue(4));
+	//job.computeGroups = [{ joinKey: 'hackathon', joinSecret: 'dcp2021' }];
+	let resultSet = await job.exec(compute.marketValue(2));
 
 	let best = {worth: 0, combo: ""};
 	resultSet.forEach(result =>{
@@ -244,6 +245,11 @@ function findOptimal(){
 	
 	//console.log(dcpStarts);
 	finished = false;
+	fit = 0;
+	optimal = "";
+	totalW = 0;
+	totalV = 0;
+	
 	drawUI();
 	deploy();
 }
@@ -312,7 +318,7 @@ function drawUI(){
 	roundedRect(ctx, 75, 25, sqrtItems * 50, y * 50, 15);
 	
 	ctx.font = ctx.font = '16px sans-serif';
-	ctx.fillText("Total weight: " + totalW + "kg" + " / " + limit + "kg", 80, 45 + y * 50);
+	ctx.fillText("Total weight: " + totalW + " / " + limit, 80, 45 + y * 50);
 	ctx.fillText("Total value: $" + totalV, 80, 65 + y * 50);
 	
 	drawKnapsack(num - fit, true, str.replaceAll(new RegExp("["+optimal+"]", 'g'), ''));
